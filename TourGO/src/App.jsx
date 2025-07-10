@@ -1,8 +1,7 @@
-// src/App.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, message, Space, Card } from 'antd';
-import LoginPage from './LoginPage.jsx'; // Use .jsx
+import LoginPage from './LoginPage.jsx';
 import './App.css';
 
 function App() {
@@ -24,13 +23,7 @@ function App() {
     <div className="App">
       <Space direction="vertical" align="center" size="large">
         <LoginPage />
-        
-        <Card title="Backend Connection Test" style={{ width: 400 }}>
-          <Button onClick={fetchMessageFromBackend}>
-            Test Backend Connection
-          </Button>
-          {backendMessage && <p style={{ marginTop: '15px' }}><strong>Response:</strong> {backendMessage}</p>}
-        </Card>
+       
       </Space>
     </div>
   );

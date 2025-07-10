@@ -1,12 +1,33 @@
+// src/LoginPage.jsx
+
 import React from 'react';
-import { Card, Form, Input, Button, Typography } from 'antd';
+import axios from 'axios'; // Make sure axios is imported
+import { Card, Form, Input, Button, Typography, message } from 'antd'; // Import message
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
 const LoginPage = () => {
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+  // Make the onFinish function async to use await
+  const onFinish = async (values) => {
+    console.log('Attempting to log in with:', values);
+
+    try {
+      // Send a POST request to our new backend endpoint
+      // The `values` object from the form already has {username: "...", password: "..."}
+      const response = await axios.post('http://localhost:8080/api/auth/login', values);
+
+      // Handle a successful response
+      console.log('Login success:', response.data);
+      message.success('Login successful! Welcome.');
+
+      // NEXT STEP will be: save the token from response.data and redirect to a dashboard.
+      
+    } catch (error) {
+      // Handle an error response
+      console.error('Login failed:', error.response);
+      message.error('Login failed. Please check your username and password.');
+    }
   };
 
   return (
