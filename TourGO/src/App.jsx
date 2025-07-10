@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, message, Space, Card } from 'antd';
-import LoginPage from './LoginPage.jsx';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import './App.css'; 
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
-  const [backendMessage, setBackendMessage] = useState('');
-
-  const fetchMessageFromBackend = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/hello');
-      setBackendMessage(response.data);
-      message.success('Successfully connected to backend!');
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-      setBackendMessage('Could not connect to backend.');
-      message.error('Failed to connect to backend. Is it running?');
-    }
-  };
-
   return (
     <div className="App">
-      <Space direction="vertical" align="center" size="large">
-        <LoginPage />
-       
-      </Space>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+         <Route path="/register" element={<RegisterPage />} />
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } 
+        />
+  
+        <Route path="*" element={<p>There's nothing here: 404!</p>} />
+      </Routes>
     </div>
   );
 }

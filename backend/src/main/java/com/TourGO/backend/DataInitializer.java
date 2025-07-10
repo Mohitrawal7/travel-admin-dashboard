@@ -20,12 +20,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Check if an admin user already exists
         if (userRepository.findByUsername("admin").isEmpty()) {
             System.out.println("Creating default admin user...");
             User admin = new User();
             admin.setUsername("admin");
-            // IMPORTANT: Always encode passwords before saving!
             admin.setPassword(passwordEncoder.encode("password"));
             userRepository.save(admin);
             System.out.println("Default admin user created.");

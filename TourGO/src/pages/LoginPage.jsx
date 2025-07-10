@@ -1,32 +1,31 @@
-// src/LoginPage.jsx
-
-import React from 'react';
-import axios from 'axios'; // Make sure axios is imported
-import { Card, Form, Input, Button, Typography, message } from 'antd'; // Import message
+import React, { useState } from 'react';
+import { useNavigate,Link } from 'react-router-dom';
+import axios from 'axios';
+import { Card, Form, Input, Button, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useAuth } from '../context/AuthContext';
 
 const { Title } = Typography;
 
 const LoginPage = () => {
-  // Make the onFinish function async to use await
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+
   const onFinish = async (values) => {
-    console.log('Attempting to log in with:', values);
-
+    setLoading(true);
     try {
-      // Send a POST request to our new backend endpoint
-      // The `values` object from the form already has {username: "...", password: "..."}
-      const response = await axios.post('http://localhost:8080/api/auth/login', values);
-
-      // Handle a successful response
-      console.log('Login success:', response.data);
+       await login( values); 
       message.success('Login successful! Welcome.');
-
-      // NEXT STEP will be: save the token from response.data and redirect to a dashboard.
       
+      // Redirect to the dashboard after successful login
+      navigate('/');
+
     } catch (error) {
-      // Handle an error response
-      console.error('Login failed:', error.response);
+      console.error('Login failed:', error); 
       message.error('Login failed. Please check your username and password.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +39,7 @@ const LoginPage = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
+        
         <Form.Item
           name="username"
           rules={[{ required: true, message: 'Please input your Username!' }]}
@@ -52,12 +52,16 @@ const LoginPage = () => {
         >
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
+     
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }} loading={loading}>
             Log in
           </Button>
         </Form.Item>
+           <Form.Item style={{ textAlign: 'center' }}>
+                    Don't have an account? <Link to="/register">Register now!</Link>
+                </Form.Item>
       </Form>
     </Card>
   );

@@ -1,14 +1,11 @@
 package com.TourGO.backend.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-
 public class LoginResponse {
     private String message;
-
+    private String jwtToken;
     public LoginResponse() {
     }
 
@@ -18,6 +15,19 @@ public class LoginResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public LoginResponse(String message, String jwtToken) {
+        this.message = message;
+        this.jwtToken = jwtToken;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 
     public void setMessage(String message) {

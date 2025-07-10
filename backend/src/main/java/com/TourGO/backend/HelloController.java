@@ -10,6 +10,6 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String sayHello() {
-        return "Hello from your Spring Boot Backend!";
+        return "Hello ";
     }
 }
