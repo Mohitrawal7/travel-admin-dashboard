@@ -15,6 +15,7 @@ const DashboardPage = () => {
                 <div style={{ height: '32px', margin: '16px', background: 'rgba(255, 255, 255, 0.2)', color: 'white', textAlign: 'center', lineHeight: '32px', borderRadius: '6px' }}>
                     TourGO
                 </div>
+
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                     <Menu.Item key="1" icon={<GlobalOutlined />}>
                         Tours
@@ -41,6 +42,7 @@ const DashboardPage = () => {
                         <p>This is where the list of tours will be displayed. The next step is to build the functionality to add and view tours here.</p>
                         <p>Use the sidebar to navigate between different sections of the dashboard.</p>
                         <p>More features will be added soon!</p>
+
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>TourGO ©2024 Created with Ant Design</Footer>
@@ -50,3 +52,20 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
