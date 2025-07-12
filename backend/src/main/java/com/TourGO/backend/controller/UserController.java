@@ -31,6 +31,7 @@ public class UserController {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
+        userDto.setRole(user.getRole());  //role in dto
 
         return ResponseEntity.ok(userDto);
     }

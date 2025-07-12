@@ -59,7 +59,8 @@ public class SecurityConfig {
                 .map(user -> org.springframework.security.core.userdetails.User.builder()
                         .username(user.getUsername())
                         .password(user.getPassword())
-                        .roles("USER")
+                        .authorities(user.getRole()) //role added
+
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
