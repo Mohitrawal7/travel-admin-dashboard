@@ -1,23 +1,33 @@
 import React from 'react';
 import { Modal, Form, Input, Button } from 'antd';
-
+import { useEffect } from 'react';
+// import Space from 'antd';
 const { TextArea } = Input;
 
-const CreateTourModal = ({ visible, onCreate, onCancel }) => {
+const TourFormModal = ({ visible, onCreate, onCancel,initialValues }) => {
     const [form] = Form.useForm();
+    const isEditing = !!initialValues;
+
+     useEffect(() => {
+        if (isEditing) {
+            form.setFieldsValue(initialValues);
+        } else {
+            form.resetFields();
+        }
+    }, [initialValues, form, isEditing]);
 
     return (
         <Modal
             visible={visible}
-            title="Create a New Tour"
-            okText="Create"
+            title={isEditing ? "Edit Tour" : "Create Tour"}
+            okText={isEditing ? "Update" : "Create"}
             cancelText="Cancel"
             onCancel={onCancel}
             onOk={() => {
                 form
                     .validateFields()
                     .then((values) => {
-                        form.resetFields();
+                    
                         onCreate(values);
                     })
                     .catch((info) => {
@@ -48,4 +58,4 @@ const CreateTourModal = ({ visible, onCreate, onCancel }) => {
     );
 };
 
-export default CreateTourModal;
+export default TourFormModal;

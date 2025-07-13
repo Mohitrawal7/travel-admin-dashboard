@@ -4,6 +4,7 @@ import com.TourGO.backend.dto.TourDto;
 import com.TourGO.backend.model.Tour;
 import com.TourGO.backend.repository.TourRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,32 @@ public class TourController {
         return ResponseEntity.ok(convertToDto(savedTour));
     }
 
-    // Helper method to convert Entity to DTO
+    @PutMapping("/{id}")
+    public ResponseEntity<TourDto> updateTour(@PathVariable Long id, @RequestBody TourDto tourDto) {
+        Tour tour = tourRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tour not found with id: " + id));
+
+        tour.setName(tourDto.getName());
+        tour.setCountry(tourDto.getCountry());
+        tour.setDescription(tourDto.getDescription());
+
+        Tour updatedTour = tourRepository.save(tour);
+        return ResponseEntity.ok(convertToDto(updatedTour));
+    }
+
+    // DELETE a tour by its ID
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // <-- THIS IS THE SECURITY RULE!
+    public ResponseEntity<?> deleteTour(@PathVariable Long id) {
+        if (!tourRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        tourRepository.deleteById(id);
+        return ResponseEntity.ok("Tour deleted successfully!");
+    }
+
+
+    // method to convert Entity to DTO
     private TourDto convertToDto(Tour tour) {
         TourDto tourDto = new TourDto();
         tourDto.setId(tour.getId());

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Typography, Button, Table, message, Spin } from 'antd';
-import { UserOutlined, GlobalOutlined, LogoutOutlined, PlusOutlined } from '@ant-design/icons';
+import { Layout, Menu, Typography, Button, Table, message, Spin,Space,Popconfirm } from 'antd';
+import { UserOutlined, GlobalOutlined, LogoutOutlined, PlusOutlined,EditOutlined,DeleteOutlined } from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axiosConfig';
-import CreateTourModal from '../components/CreateTourModal'; // <-- Import the new modal
+import TourFormModal from '../components/TourFormModal';
+
+
 
 const { Header, Content, Sider, Footer } = Layout;
 const { Title } = Typography;
@@ -13,8 +15,8 @@ const DashboardPage = () => {
     const [tours, setTours] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [editingTour, setEditingTour] = useState(null);
 
-    // Fetch all tours when the component mounts
     const fetchTours = async () => {
         setLoading(true);
         try {
@@ -31,23 +33,71 @@ const DashboardPage = () => {
         fetchTours();
     }, []);
 
-    // Function to handle tour creation from the modal
-    const handleCreateTour = async (values) => {
+   
+    const handleFormSubmit = async (values) => {
         try {
-            const response = await api.post('/api/tours', values);
-            setTours([...tours, response.data]); // Add new tour to the list
-            setIsModalVisible(false); // Close the modal
-            message.success('Tour created successfully!');
+            if(editingTour) {
+                const response = await api.put(`/api/tours/${editingTour.id}`, values);
+                setTours(tours.map(tour => tour.id === editingTour.id ? response.data : tour)); 
+                message.success('Tour updated successfully!');
+            } else {
+                const response = await api.post('/api/tours', values);
+                setTours([...tours, response.data]); 
+                message.success('Tour created successfully!');
+            }
+            setIsModalVisible(false);
+            setEditingTour(null);
         } catch (error) {
-            message.error('Failed to create tour.');
+            message.error('error occurred .');
+        }
+    
+    };
+
+      const handleDeleteTour = async (tourId) => {
+        try {
+            await api.delete(`/api/tours/${tourId}`);
+            setTours(tours.filter(t => t.id !== tourId));
+            message.success('Tour deleted successfully!');
+        } catch (error) {
+            console.error(error);
+            message.error('Failed to delete tour. Only Admins can perform this action.');
         }
     };
 
-    const columns = [
-        { title: 'ID', dataIndex: 'id', key: 'id', sorter: (a, b) => a.id - b.id },
-        { title: 'Name', dataIndex: 'name', key: 'name', sorter: (a, b) => a.name.localeCompare(b.name) },
+    const handleEditClick = (tour) => {
+        setEditingTour(tour);
+        setIsModalVisible(true);
+    };
+
+    const handleAddClick = () => {
+        setEditingTour(null); 
+        setIsModalVisible(true);
+    };
+
+     const columns = [
+        { title: 'ID', dataIndex: 'id', key: 'id' },
+        { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Country', dataIndex: 'country', key: 'country' },
-        { title: 'Description', dataIndex: 'description', key: 'description' },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button icon={<EditOutlined />} onClick={() => handleEditClick(record)}>Edit</Button>
+                    
+                    {user?.role === 'ROLE_ADMIN' && (
+                        <Popconfirm
+                            title="Are you sure you want to delete this tour?"
+                            onConfirm={() => handleDeleteTour(record.id)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button icon={<DeleteOutlined />} danger>Delete</Button>
+                        </Popconfirm>
+                    )}
+                </Space>
+            ),
+        },
     ];
 
 
@@ -89,26 +139,28 @@ const DashboardPage = () => {
                             <Button
                                 type="primary"
                                 icon={<PlusOutlined />}
-                                onClick={() => setIsModalVisible(true)}
+                                onClick={handleAddClick}
                             >
                                 Add Tour
                             </Button>
                         </div>
-                        {loading ? (
-                            <div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" /></div>
-                        ) : (
-                            <Table columns={columns} dataSource={tours} rowKey="id" />
-                        )}
+
+                       <Table columns={columns} dataSource={tours} rowKey="id"  />
                     </div>
                 </Content>
+
                 <Footer style={{ textAlign: 'center' }}>
                     TourGO ©2025 Created by MASSKN
                 </Footer>
             </Layout>
-            <CreateTourModal
+            <TourFormModal
                 visible={isModalVisible}
-                onCreate={handleCreateTour}
-                onCancel={() => setIsModalVisible(false)}
+                initialValues={editingTour} 
+                onSubmit={handleFormSubmit}
+                onCancel={() => {
+                    setIsModalVisible(false);
+                    setEditingTour(null);
+                }}
             />
         </Layout>
     );
