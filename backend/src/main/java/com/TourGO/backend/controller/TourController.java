@@ -5,6 +5,7 @@ import com.TourGO.backend.model.Tour;
 import com.TourGO.backend.model.User;
 import com.TourGO.backend.repository.TourRepository;
 import com.TourGO.backend.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,15 @@ public class TourController {
         this.tourRepository = tourRepository;
         this.userRepository = userRepository;
     }
+
+    @GetMapping("/public")
+    public List<TourDto> getPublicTours(){
+        return tourRepository.findAll(PageRequest.of(0,5)).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
 
     // Endpoint to GET all tours
     @GetMapping

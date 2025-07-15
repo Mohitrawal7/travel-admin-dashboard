@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     const userResponse = await api.get("/api/users/me");
     setUser(userResponse.data);
 
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const logout = () => {
