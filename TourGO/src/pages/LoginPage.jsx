@@ -78,19 +78,12 @@
 
 // export default LoginPage;
 
-
-
-
-
-
-
-
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, Form, Input, Button, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useAuth } from '../context/AuthContext';
-import styles from '../style';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Card, Form, Input, Button, Typography, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { useAuth } from "../context/AuthContext";
+import styles from "../style";
 
 const { Title } = Typography;
 
@@ -105,16 +98,16 @@ const LoginPage = () => {
     try {
       await login(values);
       messageApi.success({
-        content: 'Login successful! Welcome.',
+        content: "Login successful! Welcome.",
         duration: 2,
-        placement: 'topLeft'
+        placement: "topLeft",
       });
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       messageApi.error({
-        content: 'Login failed. Please check your credentials.',
+        content: "Login failed. Please check your credentials.",
         duration: 2,
-        placement: 'topRight'
+        placement: "topRight",
       });
     } finally {
       setLoading(false);
@@ -125,39 +118,54 @@ const LoginPage = () => {
     <div style={styles.page}>
       {contextHolder}
       <Card style={styles.card} bordered={false}>
-        <Title level={2} style={styles.title}>Login to TourGO</Title>
+        <Title level={2} style={styles.title}>
+          Login to TourGO
+        </Title>
         <Form name="login" onFinish={onFinish} layout="vertical">
           <Form.Item
             name="username"
             label={<span style={styles.label}>Username</span>}
-            rules={[{ required: true, message: 'Please enter your username' }]}
+            rules={[{ required: true, message: "Please enter your username" }]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Enter your username" />
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="Enter your username"
+            />
           </Form.Item>
 
           <Form.Item
             name="password"
             label={<span style={styles.label}>Password</span>}
-            rules={[{ required: true, message: 'Please enter your password' }]}
+            rules={[{ required: true, message: "Please enter your password" }]}
           >
-            <Input.Password prefix={<LockOutlined />} placeholder="Enter your password" />
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Enter your password"
+            />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block loading={loading} style={styles.button}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              loading={loading}
+              style={styles.button}
+            >
               Log In
             </Button>
           </Form.Item>
 
           <div style={styles.footerText}>
-            Don’t have an account? <Link to="/register" style={styles.link}>Register</Link>
+            Don’t have an account?{" "}
+            <Link to="/register" style={styles.link}>
+              Register
+            </Link>
           </div>
         </Form>
       </Card>
     </div>
   );
 };
-
-
 
 export default LoginPage;

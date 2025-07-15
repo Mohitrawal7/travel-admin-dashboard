@@ -8,6 +8,7 @@ public class TourDto {
     private String name;
     private String country;
     private String description;
+    private String createdBy;
 
     public Long getId() {
         return id;

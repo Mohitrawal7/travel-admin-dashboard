@@ -1,17 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080', //backend URL
+  baseURL: "http://localhost:8080", //backend URL
 });
 
 // Add a request interceptor
 api.interceptors.request.use(
   (config) => {
     //token from localStorage
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     if (token) {
       // If token exists, add it to the Authorization header
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
