@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api") // A good practice to prefix all APIs
+@RequestMapping("/api")
 public class HelloController {
 
     @GetMapping("/hello")
     public String sayHello() {
-        return "Hello from your Spring Boot Backend!";
+        return "Hello ";
     }
 }

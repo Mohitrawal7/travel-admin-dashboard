@@ -1,37 +1,30 @@
-// src/App.jsx
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, message, Space, Card } from 'antd';
-import LoginPage from './LoginPage.jsx'; // Use .jsx
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import "./App.css";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
-  const [backendMessage, setBackendMessage] = useState('');
-
-  const fetchMessageFromBackend = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/hello');
-      setBackendMessage(response.data);
-      message.success('Successfully connected to backend!');
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-      setBackendMessage('Could not connect to backend.');
-      message.error('Failed to connect to backend. Is it running?');
-    }
-  };
-
   return (
     <div className="App">
-      <Space direction="vertical" align="center" size="large">
-        <LoginPage />
-        
-        <Card title="Backend Connection Test" style={{ width: 400 }}>
-          <Button onClick={fetchMessageFromBackend}>
-            Test Backend Connection
-          </Button>
-          {backendMessage && <p style={{ marginTop: '15px' }}><strong>Response:</strong> {backendMessage}</p>}
-        </Card>
-      </Space>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<p>There's nothing here: 404!</p>} />
+      </Routes>
     </div>
   );
 }
