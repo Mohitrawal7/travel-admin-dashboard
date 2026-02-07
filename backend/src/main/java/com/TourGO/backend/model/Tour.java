@@ -2,11 +2,11 @@ package com.TourGO.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 @Entity
 @Table(name = "tours")
-@Data
+
 public class Tour {
 
     @Id

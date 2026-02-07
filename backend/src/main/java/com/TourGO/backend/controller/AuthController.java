@@ -37,7 +37,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         // Checking if user already exist here
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            // Return eroor or 404 if the username is taken
+            // Return error or 404 if the username is taken
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Username is already taken!");
         }
 
@@ -45,7 +45,7 @@ public class AuthController {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword())); //protect password
-        user.setRole("ROLE_USER");
+        user.setRole("USER");
 
         userRepository.save(user);
 

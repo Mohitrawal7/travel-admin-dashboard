@@ -9,12 +9,15 @@ const TourFormModal = ({ visible, onSubmit, onCancel, initialValues }) => {
   const isEditing = !!initialValues;
 
   useEffect(() => {
-    if (isEditing) {
-      form.setFieldsValue(initialValues);
-    } else {
-      form.resetFields();
-    }
-  }, [initialValues, form, isEditing]);
+  if (!visible) return;
+
+  if (isEditing) {
+    form.setFieldsValue(initialValues);
+  } else {
+    form.resetFields();
+  }
+}, [visible, initialValues, isEditing, form]);
+
 
   return (
     <Modal

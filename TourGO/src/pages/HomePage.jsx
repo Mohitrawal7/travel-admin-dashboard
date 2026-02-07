@@ -82,9 +82,10 @@ const HomePage = () => {
                   <Card
                     hoverable
                     cover={
-                      <img
+                      <img className="w-[20px] h-[20px]"
                         alt={tour.name}
                         src={`https://picsum.photos/seed/${tour.id}/400/200`}
+                        // src="./src/Forest.jpg"
                       />
                     } // Placeholder images
                   >
