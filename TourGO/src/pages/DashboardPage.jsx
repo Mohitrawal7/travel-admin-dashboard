@@ -72,7 +72,8 @@ const DashboardPage = () => {
       setIsModalVisible(false);
       setEditingTour(null);
     } catch (error) {
-      message.error("error occurred .");
+      message.error("Error occurred while saving tour.");
+      console.log(error);
     }
   };
 

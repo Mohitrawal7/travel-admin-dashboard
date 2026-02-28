@@ -2,8 +2,8 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-   "https://travel-admin-dashboard-4u6e.onrender.com"
-  // "http://localhost:8080"
+  //  "https://travel-admin-dashboard-4u6e.onrender.com"
+  "http://localhost:8080"
 });
 
 // Add a request interceptor
