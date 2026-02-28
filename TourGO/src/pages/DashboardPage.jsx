@@ -22,6 +22,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axiosConfig";
 import TourFormModal from "../components/TourFormModal";
+import { Link,useLocation } from "react-router-dom";
 
 const { Header, Content, Sider, Footer } = Layout;
 const { Title } = Typography;
@@ -33,6 +34,8 @@ const DashboardPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingTour, setEditingTour] = useState(null);
   const [searchText, setSearchText] = useState("");
+
+  const location = useLocation();
 
   const fetchTours = async () => {
     setLoading(true);
@@ -69,9 +72,23 @@ const DashboardPage = () => {
       setIsModalVisible(false);
       setEditingTour(null);
     } catch (error) {
-      message.error("error occurred .");
+      message.error("Error occurred while saving tour.");
+      console.log(error);
     }
   };
+
+  const menuItems = [
+  {
+    key: "/dashboard",
+    icon: <GlobalOutlined />,
+    label: <Link to="/dashboard">Tours</Link>,
+  },
+  {
+    key: "/profile",
+    icon: <UserOutlined />,
+    label: <Link to="/profile">Profile</Link>,
+  },
+];
 
   const handleDeleteTour = async (tourId) => {
     try {
@@ -121,7 +138,7 @@ const DashboardPage = () => {
       key: "actions",
       render: (_, record) => {
         const canModify =
-          user?.role === "ROLE_ADMIN" || user?.id === record.createdBy.id;
+          user?.role === "ADMIN" || user?.id === record.createdBy.id;
         return (
           <Space size="very small" className="flex flex-row gap-2">
             {
@@ -132,7 +149,7 @@ const DashboardPage = () => {
                 Edit
               </Button>
             }
-            {canModify && user?.role === "ROLE_ADMIN" && (
+            {canModify && user?.role === "ADMIN" && (
               <Popconfirm
                 title="Are you sure?"
                 onConfirm={() => handleDeleteTour(record.id)}
@@ -166,14 +183,23 @@ const DashboardPage = () => {
           TourGO
         </div>
 
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1" icon={<GlobalOutlined />}>
-            Tours
-          </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            Profile
-          </Menu.Item>
-        </Menu>
+        {/* <Menu theme="dark" selectedKeys={[location.pathname]} mode="inline">
+          
+    <Menu.Item key="/dashboard" icon={<GlobalOutlined />}>
+      <Link to="/dashboard">Tours</Link>
+    </Menu.Item>
+
+    <Menu.Item key="/profile" icon={<UserOutlined />}>
+      <Link to="/profile">Profile</Link>
+    </Menu.Item>
+        
+        </Menu> */}
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+        />
       </Sider>
       <Layout>
         <Header
@@ -192,7 +218,8 @@ const DashboardPage = () => {
             </span>
             <span style={{ marginRight: "16px", fontStyle: "italic" }}>
               {/* (Role: {user?.role.replace('ROLE_', '')}) */}
-              {user?.role.replace("ROLE_", "") === "ADMIN" ? "Admin" : "User"}
+              {user?.role === "ADMIN" ? "Admin" : "User"}
+              {/* {user?.role.charAt(0).toUpperCase() + user?.role.slice(1).toLowerCase()} */}
             </span>
             <Button
               type="primary"
@@ -211,35 +238,37 @@ const DashboardPage = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "16px",
+                marginBottom: "24px",
               }}
             >
               <Title level={2}>Manage Tours</Title>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-8">
-                <Input
-                  placeholder="Search by tour name"
-                  className="w-full sm:w-auto"
-                  style={{ width: 200, marginRight: "16px" }}
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={handleAddClick}
-        
-                >
-                  Add Tour
-                </Button>
+              {/* <div className="flex flex-col sm:flex-row sm:items-center sm:gap-8"> */}
+              <div className="">
+              <Input
+                placeholder="Search by tour name"
+                className="w-[80%]  sm:w-auto"
+                style={{ width: "250px", marginRight: "2px" }}
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <Button
+                type="primary"
+                className=" m-4"
+                icon={<PlusOutlined />}
+                onClick={handleAddClick}
+              >
+                Add Tour
+              </Button>
               </div>
+
             </div>
 
             <Table
-            overflow={{ x:"auto"}}
+              overflow={{ x: "auto" }}
               columns={columns}
               dataSource={filteredTours}
               rowKey="id"
-              pagination={{ pageSize:3 }}
+              pagination={{ pageSize: 3 }}
             />
           </div>
         </Content>
@@ -251,7 +280,7 @@ const DashboardPage = () => {
             marginBottom: "16px",
           }}
         >
-          TourGO ©2025 Created by MASK
+          TourGO ©2025 Created by MASKSN
         </Footer>
       </Layout>
       <TourFormModal

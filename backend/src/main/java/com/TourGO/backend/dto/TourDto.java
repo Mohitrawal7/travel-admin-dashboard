@@ -1,14 +1,20 @@
 package com.TourGO.backend.dto;
 
-import lombok.Data;
 
-@Data
 public class TourDto {
     private Long id;
     private String name;
     private String country;
     private String description;
     private String createdBy;
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
     public Long getId() {
         return id;
