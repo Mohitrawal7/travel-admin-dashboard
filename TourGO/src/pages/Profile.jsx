@@ -43,6 +43,13 @@ const Profile = () => {
           </Menu.Item>
         </Menu>
       </Sider>
+      <Layout>
+<h1 style={{
+  margin:"10px",
+  text:"text-center",
+  
+}} >Profile</h1>
+      </Layout>
     </Layout>
   );
 };
